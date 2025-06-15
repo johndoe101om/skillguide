@@ -47,6 +47,7 @@ import {
   Sparkles,
   ArrowRight,
   BookmarkPlus,
+  BarChart3,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
