@@ -387,12 +387,14 @@ export default function Index() {
               <div className="relative">
                 <div className="bg-gradient-to-br from-skillguide-50 to-skillguide-100 rounded-3xl p-8 shadow-2xl">
                   <div className="grid grid-cols-2 gap-6 mb-8">
-                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
-                      <div className="text-3xl font-bold text-skillguide-600 mb-1">
-                        95%
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        Completion Rate
+                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300 h-32 flex flex-col justify-between">
+                      <div>
+                        <div className="text-3xl font-bold text-skillguide-600 mb-1">
+                          95%
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Completion Rate
+                        </div>
                       </div>
                       <div className="mt-2">
                         <div className="w-full bg-gray-200 rounded-full h-2">
@@ -403,11 +405,13 @@ export default function Index() {
                         </div>
                       </div>
                     </div>
-                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
-                      <div className="text-3xl font-bold text-skillguide-600 mb-1">
-                        4.8/5
+                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300 h-32 flex flex-col justify-between">
+                      <div>
+                        <div className="text-3xl font-bold text-skillguide-600 mb-1">
+                          4.8/5
+                        </div>
+                        <div className="text-sm text-gray-600">Avg Rating</div>
                       </div>
-                      <div className="text-sm text-gray-600">Avg Rating</div>
                       <div className="flex justify-center mt-2">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -417,12 +421,14 @@ export default function Index() {
                         ))}
                       </div>
                     </div>
-                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
-                      <div className="text-3xl font-bold text-skillguide-600 mb-1">
-                        85%
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        First Attempt Pass
+                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300 h-32 flex flex-col justify-between">
+                      <div>
+                        <div className="text-3xl font-bold text-skillguide-600 mb-1">
+                          85%
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          First Attempt Pass
+                        </div>
                       </div>
                       <div className="flex items-center justify-center mt-2">
                         <TrendingUp className="w-4 h-4 text-green-500" />
@@ -431,12 +437,14 @@ export default function Index() {
                         </span>
                       </div>
                     </div>
-                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
-                      <div className="text-3xl font-bold text-skillguide-600 mb-1">
-                        1200+
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        Active Candidates
+                    <div className="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow duration-300 h-32 flex flex-col justify-between">
+                      <div>
+                        <div className="text-3xl font-bold text-skillguide-600 mb-1">
+                          1200+
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Active Candidates
+                        </div>
                       </div>
                       <div className="flex items-center justify-center mt-2">
                         <Users className="w-4 h-4 text-blue-500" />
