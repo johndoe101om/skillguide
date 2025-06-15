@@ -49,345 +49,343 @@ const App = () => (
           <Toaster />
           <Sonner />
           <Routes>
-              {/* Public Routes */}
-              <Route
-                path="/"
-                element={
-                  <Layout>
-                    <Index />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  <Layout forceNavigation="none">
-                    <Login />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/help"
-                element={
-                  <Layout>
-                    <HelpCenter />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documentation"
-                element={
-                  <Layout>
-                    <Documentation />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/contact"
-                element={
-                  <Layout>
-                    <ContactUs />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/privacy"
-                element={
-                  <Layout>
-                    <PrivacyPolicy />
-                  </Layout>
-                }
-              />
+            {/* Public Routes */}
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <Index />
+                </Layout>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <Layout forceNavigation="none">
+                  <Login />
+                </Layout>
+              }
+            />
+            <Route
+              path="/help"
+              element={
+                <Layout>
+                  <HelpCenter />
+                </Layout>
+              }
+            />
+            <Route
+              path="/documentation"
+              element={
+                <Layout>
+                  <Documentation />
+                </Layout>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <Layout>
+                  <ContactUs />
+                </Layout>
+              }
+            />
+            <Route
+              path="/privacy"
+              element={
+                <Layout>
+                  <PrivacyPolicy />
+                </Layout>
+              }
+            />
 
-              {/* User Protected Routes */}
-              <Route
-                path="/register"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <CandidateRegistration />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <Dashboard />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/candidates"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <Candidates />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/reports"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <Reports />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/analytics"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <Analytics />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/test"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <Test />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <Profile />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/personalization-settings"
-                element={
-                  <ProtectedRoute allowedRoles={["user"]}>
-                    <Layout>
-                      <PersonalizationSettings />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Trainer Protected Routes */}
-              <Route
-                path="/trainer/dashboard"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <TrainerDashboard />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/trainer/students"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <TrainerStudents />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/trainer/courses"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <TrainerCourses />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/trainer/assessments"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <TrainerAssessments />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/trainer/analytics"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <Analytics />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/trainer/reports"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <Reports />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/trainer/profile"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <Profile />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/trainer/settings"
-                element={
-                  <ProtectedRoute allowedRoles={["trainer"]}>
-                    <Layout>
-                      <div className="min-h-screen bg-gray-50 p-8">
-                        <h1 className="text-3xl font-bold">Trainer Settings</h1>
-                        <p>
-                          Configure your trainer preferences and account
-                          settings.
-                        </p>
-                      </div>
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Admin Protected Routes */}
-              <Route
-                path="/admin/dashboard"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <AdminDashboard />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/users"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <AdminUsers />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/trainers"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <AdminTrainers />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/system"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <AdminSystem />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/analytics"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <Analytics />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/database"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <div className="min-h-screen bg-gray-50 p-8">
-                        <h1 className="text-3xl font-bold">
-                          Database Management
-                        </h1>
-                        <p>
-                          Monitor and manage database operations, queries, and
-                          performance.
-                        </p>
-                      </div>
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/reports"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <Reports />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/profile"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <Profile />
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/settings"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Layout>
-                      <div className="min-h-screen bg-gray-50 p-8">
-                        <h1 className="text-3xl font-bold">Admin Settings</h1>
-                        <p>
-                          Configure admin account preferences and notification
-                          settings.
-                        </p>
-                      </div>
-                    </Layout>
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Catch-all route */}
-              <Route
-                path="*"
-                element={
+            {/* User Protected Routes */}
+            <Route
+              path="/register"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
                   <Layout>
-                    <NotFound />
+                    <CandidateRegistration />
                   </Layout>
-                }
-              />
-            </Routes>
-          </BrowserRouter>
-        </AuthProvider>
-      </TooltipProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/candidates"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <Layout>
+                    <Candidates />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <Layout>
+                    <Reports />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <Layout>
+                    <Analytics />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/test"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <Layout>
+                    <Test />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <Layout>
+                    <Profile />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/personalization-settings"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <Layout>
+                    <PersonalizationSettings />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Trainer Protected Routes */}
+            <Route
+              path="/trainer/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <TrainerDashboard />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/students"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <TrainerStudents />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/courses"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <TrainerCourses />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/assessments"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <TrainerAssessments />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/analytics"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <Analytics />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/reports"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <Reports />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/profile"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <Profile />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/settings"
+              element={
+                <ProtectedRoute allowedRoles={["trainer"]}>
+                  <Layout>
+                    <div className="min-h-screen bg-gray-50 p-8">
+                      <h1 className="text-3xl font-bold">Trainer Settings</h1>
+                      <p>
+                        Configure your trainer preferences and account settings.
+                      </p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin Protected Routes */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <AdminDashboard />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <AdminUsers />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/trainers"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <AdminTrainers />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/system"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <AdminSystem />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/analytics"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <Analytics />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/database"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <div className="min-h-screen bg-gray-50 p-8">
+                      <h1 className="text-3xl font-bold">
+                        Database Management
+                      </h1>
+                      <p>
+                        Monitor and manage database operations, queries, and
+                        performance.
+                      </p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/reports"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <Reports />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/profile"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <Profile />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/settings"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Layout>
+                    <div className="min-h-screen bg-gray-50 p-8">
+                      <h1 className="text-3xl font-bold">Admin Settings</h1>
+                      <p>
+                        Configure admin account preferences and notification
+                        settings.
+                      </p>
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Catch-all route */}
+            <Route
+              path="*"
+              element={
+                <Layout>
+                  <NotFound />
+                </Layout>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </QueryClientProvider>
   </ErrorBoundary>
 );
