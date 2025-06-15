@@ -20,9 +20,10 @@ export default function Navigation() {
 
   const navItems = [
     { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/test", label: "Test", icon: Brain },
     { path: "/reports", label: "Reports", icon: FileText },
     { path: "/analytics", label: "Analytics", icon: BarChart3 },
-    { path: "/test", label: "Test", icon: Brain },
+    { path: "/personalization-settings", label: "Personalize", icon: User },
   ];
 
   const isActive = (path: string) => location.pathname === path;
