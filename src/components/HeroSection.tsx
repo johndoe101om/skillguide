@@ -87,9 +87,8 @@ const HeroSection = () => {
               </Link>
               <Link to="/dashboard">
                 <Button
-                  variant="outline"
                   size="lg"
-                  className="border-white/50 text-white hover:bg-white/20 hover:border-white/70 text-lg px-10 py-6 rounded-xl backdrop-blur-sm shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 font-semibold"
+                  className="bg-white/20 border-2 border-white/60 text-white hover:bg-white/30 hover:border-white/80 text-lg px-10 py-6 rounded-xl backdrop-blur-sm shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 font-semibold"
                 >
                   <Play className="mr-2 h-5 w-5" />
                   Watch Demo
