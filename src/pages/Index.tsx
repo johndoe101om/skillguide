@@ -514,10 +514,10 @@ export default function Index() {
                     />
                   ))}
                 </div>
-                <p className="text-gray-600 mb-6 italic leading-relaxed">
+                <p className="text-gray-600 mb-6 italic leading-relaxed flex-grow">
                   "{testimonial.content}"
                 </p>
-                <div className="flex items-center">
+                <div className="flex items-center mt-auto">
                   <div className="w-12 h-12 bg-skillguide-gradient rounded-full flex items-center justify-center text-white font-bold mr-4">
                     {testimonial.name
                       .split(" ")
