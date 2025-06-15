@@ -171,6 +171,16 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/personalization-settings"
+                element={
+                  <ProtectedRoute allowedRoles={["user"]}>
+                    <Layout>
+                      <PersonalizationSettings />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Trainer Protected Routes */}
               <Route
