@@ -240,7 +240,7 @@ export default function Index() {
             {batchTypes.map((batch, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100"
+                className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 h-full flex flex-col"
               >
                 <div className="flex items-center mb-6">
                   <div className="text-3xl mr-4">{batch.icon}</div>
