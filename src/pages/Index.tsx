@@ -363,15 +363,18 @@ export default function Index() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/reports">
-                  <Button className="bg-skillguide-gradient hover:bg-skillguide-gradient-dark text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Button
+                    size="lg"
+                    className="bg-skillguide-gradient hover:bg-skillguide-gradient-dark text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-4"
+                  >
                     View Sample Reports
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 <Link to="/analytics">
                   <Button
-                    variant="outline"
-                    className="border-skillguide-300 text-skillguide-700 hover:bg-skillguide-50"
+                    size="lg"
+                    className="bg-skillguide-200 text-skillguide-700 hover:bg-skillguide-300 border border-skillguide-300 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-4"
                   >
                     <BarChart3 className="mr-2 h-4 w-4" />
                     Explore Analytics
