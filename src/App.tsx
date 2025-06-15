@@ -25,6 +25,7 @@ import Reports from "./pages/Reports";
 import Analytics from "./pages/Analytics";
 import Profile from "./pages/Profile";
 import Test from "./pages/Test";
+import PersonalizationSettings from "./pages/PersonalizationSettings";
 
 // Trainer Pages
 import TrainerDashboard from "./pages/trainer/TrainerDashboard";
