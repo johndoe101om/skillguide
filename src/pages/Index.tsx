@@ -258,7 +258,7 @@ export default function Index() {
                   {batch.description}
                 </p>
 
-                <div className="mb-6">
+                <div className="mb-6 flex-grow">
                   <div className="text-sm font-semibold text-gray-700 mb-3">
                     Entry Requirements:
                   </div>
@@ -273,7 +273,7 @@ export default function Index() {
                   ))}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100 mt-auto">
                   <div className="text-center">
                     <div className="text-lg font-bold text-gray-900">
                       {batch.stats.enrolled}
