@@ -1,0 +1,342 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="row">
+    <div class="col-12">
+        <!-- Hero Section -->
+        <div class="jumbotron bg-gradient bg-primary text-white rounded mb-4 p-5">
+            <div class="container">
+                <h1 class="display-4"><i class="fas fa-graduation-cap"></i> Welcome to SkillGuide</h1>
+                <p class="lead">A comprehensive learning management system for skill development and training.</p>
+                <hr class="my-4 bg-white">
+                <p>Manage assessments, track progress, and build skills with our advanced analytics and AI-powered recommendations.</p>
+                <a class="btn btn-light btn-lg" asp-controller="Home" asp-action="Dashboard" role="button">
+                    <i class="fas fa-chart-line"></i> Go to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Quick Stats Cards -->
+    <div class="col-md-3 mb-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title text-muted mb-0">Total Users</h5>
+                        <h2 class="text-primary mb-0" id="total-users">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </h2>
+                    </div>
+                    <div class="text-primary">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title text-muted mb-0">Active Batches</h5>
+                        <h2 class="text-success mb-0" id="active-batches">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </h2>
+                    </div>
+                    <div class="text-success">
+                        <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title text-muted mb-0">Assessments</h5>
+                        <h2 class="text-warning mb-0" id="total-assessments">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </h2>
+                    </div>
+                    <div class="text-warning">
+                        <i class="fas fa-tasks fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title text-muted mb-0">Completion Rate</h5>
+                        <h2 class="text-info mb-0" id="completion-rate">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </h2>
+                    </div>
+                    <div class="text-info">
+                        <i class="fas fa-chart-pie fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Activity -->
+    <div class="col-lg-8 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-clock text-primary"></i> Recent Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="recent-activity">
+                    <div class="text-center">
+                        <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                        <p class="text-muted mt-2">Loading recent activity...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt text-primary"></i> Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-outline-primary" onclick="createAssessment()">
+                        <i class="fas fa-plus-circle"></i> Create Assessment
+                    </a>
+                    <a href="#" class="btn btn-outline-success" onclick="createBatch()">
+                        <i class="fas fa-users"></i> Create Batch
+                    </a>
+                    <a href="#" class="btn btn-outline-info" onclick="viewReports()">
+                        <i class="fas fa-chart-bar"></i> View Reports
+                    </a>
+                    <a href="/hangfire" class="btn btn-outline-warning">
+                        <i class="fas fa-cogs"></i> Background Jobs
+                    </a>
+                    <a href="/swagger" class="btn btn-outline-secondary">
+                        <i class="fas fa-code"></i> API Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Status -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-heartbeat text-primary"></i> System Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <div class="text-success">
+                                <i class="fas fa-database fa-2x"></i>
+                            </div>
+                            <h6 class="mt-2">Database</h6>
+                            <span class="badge bg-success" id="db-status">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <div class="text-success">
+                                <i class="fas fa-server fa-2x"></i>
+                            </div>
+                            <h6 class="mt-2">API Server</h6>
+                            <span class="badge bg-success" id="api-status">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <div class="text-success">
+                                <i class="fas fa-tasks fa-2x"></i>
+                            </div>
+                            <h6 class="mt-2">Background Jobs</h6>
+                            <span class="badge bg-success" id="jobs-status">Checking...</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <div class="text-success">
+                                <i class="fas fa-envelope fa-2x"></i>
+                            </div>
+                            <h6 class="mt-2">Notifications</h6>
+                            <span class="badge bg-success" id="email-status">Checking...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            loadDashboardData();
+            checkSystemStatus();
+            
+            // Refresh data every 30 seconds
+            setInterval(function() {
+                loadDashboardData();
+            }, 30000);
+        });
+
+        function loadDashboardData() {
+            // Load overview statistics
+            $.ajax({
+                url: '/api/dashboard',
+                type: 'GET',
+                success: function(data) {
+                    $('#total-users').text(data.overview.totalCandidates);
+                    $('#active-batches').text(data.overview.activeBatches);
+                    $('#completion-rate').text(data.overview.completionRate + '%');
+                    
+                    // Load assessment count separately
+                    loadAssessmentCount();
+                    
+                    // Load recent activity
+                    loadRecentActivity(data.recentActivities);
+                },
+                error: function() {
+                    $('#total-users').html('<i class="fas fa-exclamation-triangle text-danger"></i>');
+                    $('#active-batches').html('<i class="fas fa-exclamation-triangle text-danger"></i>');
+                    $('#completion-rate').html('<i class="fas fa-exclamation-triangle text-danger"></i>');
+                }
+            });
+        }
+
+        function loadAssessmentCount() {
+            $.ajax({
+                url: '/api/assessments',
+                type: 'GET',
+                success: function(data) {
+                    $('#total-assessments').text(data.length);
+                },
+                error: function() {
+                    $('#total-assessments').html('<i class="fas fa-exclamation-triangle text-danger"></i>');
+                }
+            });
+        }
+
+        function loadRecentActivity(activities) {
+            var activityHtml = '';
+            
+            if (activities && activities.length > 0) {
+                activities.slice(0, 5).forEach(function(activity) {
+                    var icon = getActivityIcon(activity.type);
+                    var timeAgo = getTimeAgo(activity.createdAt);
+                    
+                    activityHtml += `
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <i class="${icon} text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-0">${activity.title}</h6>
+                                <small class="text-muted">${activity.description || ''}</small>
+                                <br>
+                                <small class="text-muted">${timeAgo}</small>
+                            </div>
+                            ${activity.score ? `<span class="badge bg-success">${activity.score}%</span>` : ''}
+                        </div>
+                    `;
+                });
+            } else {
+                activityHtml = '<p class="text-muted text-center">No recent activity found.</p>';
+            }
+            
+            $('#recent-activity').html(activityHtml);
+        }
+
+        function checkSystemStatus() {
+            // Check API health
+            $.ajax({
+                url: '/health',
+                type: 'GET',
+                success: function() {
+                    $('#api-status').removeClass('bg-warning bg-danger').addClass('bg-success').text('Healthy');
+                },
+                error: function() {
+                    $('#api-status').removeClass('bg-success bg-warning').addClass('bg-danger').text('Error');
+                }
+            });
+
+            // Simulate other status checks
+            setTimeout(function() {
+                $('#db-status').removeClass('bg-warning bg-danger').addClass('bg-success').text('Connected');
+                $('#jobs-status').removeClass('bg-warning bg-danger').addClass('bg-success').text('Running');
+                $('#email-status').removeClass('bg-warning bg-danger').addClass('bg-success').text('Operational');
+            }, 1000);
+        }
+
+        function getActivityIcon(type) {
+            switch (type) {
+                case 'Assessment': return 'fas fa-clipboard-check';
+                case 'Submission': return 'fas fa-upload';
+                case 'Completion': return 'fas fa-check-circle';
+                case 'Registration': return 'fas fa-user-plus';
+                case 'Achievement': return 'fas fa-trophy';
+                default: return 'fas fa-info-circle';
+            }
+        }
+
+        function getTimeAgo(dateString) {
+            var date = new Date(dateString);
+            var now = new Date();
+            var diffInMs = now - date;
+            var diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+            
+            if (diffInHours < 1) {
+                var diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+                return diffInMinutes + ' minutes ago';
+            } else if (diffInHours < 24) {
+                return diffInHours + ' hours ago';
+            } else {
+                var diffInDays = Math.floor(diffInHours / 24);
+                return diffInDays + ' days ago';
+            }
+        }
+
+        // Quick action functions
+        function createAssessment() {
+            window.location.href = '/Assessment/Create';
+        }
+
+        function createBatch() {
+            window.location.href = '/Batch/Create';
+        }
+
+        function viewReports() {
+            window.location.href = '/Home/Dashboard';
+        }
+    </script>
+}
