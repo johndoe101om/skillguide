@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using SkillGuide.Api.Data;
+using SkillGuide.Api.Services;
 using Serilog;
 using System.Text.Json.Serialization;
+using Hangfire;
+using Hangfire.SqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +19,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services to the container
-builder.Services.AddControllers()
+builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -24,9 +27,38 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+// Add Razor runtime compilation for development
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+}
+
 // Add Entity Framework
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SkillGuideDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
+
+// Add Hangfire
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+    {
+        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+        QueuePollInterval = TimeSpan.Zero,
+        UseRecommendedIsolationLevel = true,
+        DisableGlobalLocks = true
+    }));
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.WorkerCount = Environment.ProcessorCount * 2;
+});
+
+// Register background job service
+builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -67,44 +99,79 @@ builder.Services.AddSwaggerGen(c =>
 
 // Add Health Checks
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<SkillGuideDbContext>();
+    .AddDbContextCheck<SkillGuideDbContext>()
+    .AddHangfire(options =>
+    {
+        options.MinimumAvailableServers = 1;
+    });
 
-// Add AutoMapper if needed
-// builder.Services.AddAutoMapper(typeof(Program));
+// Add session and data protection for MVC
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
-// Add FluentValidation if needed
-// builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "RequestVerificationToken";
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillGuide API V1");
-        c.RoutePrefix = string.Empty; // Makes Swagger UI available at root
+        c.RoutePrefix = "swagger"; // Makes Swagger UI available at /swagger
     });
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseCors("AllowFrontend");
 
 app.UseSerilogRequestLogging();
 
+app.UseRouting();
+
+app.UseSession();
+
 app.UseAuthorization();
 
+// Add Hangfire Dashboard
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new HangfireAuthorizationFilter() }
+});
+
+// Map MVC routes
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Map API routes
 app.MapControllers();
 
 app.MapHealthChecks("/health");
 
-// Seed database in development
+// Seed database and schedule recurring jobs
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<SkillGuideDbContext>();
+    var backgroundJobService = scope.ServiceProvider.GetRequiredService<IBackgroundJobService>();
     
     try
     {
@@ -116,6 +183,9 @@ if (app.Environment.IsDevelopment())
         {
             await SeedDatabase(context);
         }
+
+        // Schedule recurring background jobs
+        ScheduleRecurringJobs();
     }
     catch (Exception ex)
     {
@@ -124,6 +194,47 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
+
+// Custom Hangfire authorization filter
+public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
+{
+    public bool Authorize(DashboardContext context)
+    {
+        // In production, add proper authentication/authorization
+        return true;
+    }
+}
+
+static void ScheduleRecurringJobs()
+{
+    // Schedule recurring jobs
+    RecurringJob.AddOrUpdate<IBackgroundJobService>(
+        "update-user-rankings",
+        service => service.UpdateUserRankings(),
+        Cron.Hourly);
+
+    RecurringJob.AddOrUpdate<IBackgroundJobService>(
+        "cleanup-old-logs",
+        service => service.CleanupOldLogs(),
+        Cron.Daily);
+
+    RecurringJob.AddOrUpdate<IBackgroundJobService>(
+        "send-daily-reports",
+        service => service.SendDailyReports(),
+        Cron.Daily(8)); // 8 AM daily
+
+    RecurringJob.AddOrUpdate<IBackgroundJobService>(
+        "update-skill-demand",
+        service => service.UpdateSkillDemandData(),
+        Cron.Weekly);
+
+    RecurringJob.AddOrUpdate<IBackgroundJobService>(
+        "archive-old-batches",
+        service => service.ArchiveOldBatches(),
+        Cron.Monthly);
+
+    Log.Information("Recurring background jobs scheduled successfully");
+}
 
 static async Task SeedDatabase(SkillGuideDbContext context)
 {
@@ -325,5 +436,5 @@ static async Task SeedDatabase(SkillGuideDbContext context)
 
     await context.SaveChangesAsync();
     
-    Log.Information("Database seeded successfully");
+    Log.Information("Database seeded successfully with sample data");
 }
