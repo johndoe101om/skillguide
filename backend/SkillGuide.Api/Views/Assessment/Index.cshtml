@@ -1,0 +1,297 @@
+@model IEnumerable<SkillGuide.Api.Models.Assessment>
+@{
+    ViewData["Title"] = "Assessments";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-tasks text-primary"></i> Assessments</h2>
+    <div>
+        <button class="btn btn-outline-secondary" onclick="refreshAssessments()">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create New Assessment
+        </a>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="statusFilter" class="form-label">Status</label>
+                <select id="statusFilter" class="form-select" onchange="filterAssessments()">
+                    <option value="">All Statuses</option>
+                    <option value="Draft">Draft</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Active">Active</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Archived">Archived</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="typeFilter" class="form-label">Type</label>
+                <select id="typeFilter" class="form-select" onchange="filterAssessments()">
+                    <option value="">All Types</option>
+                    <option value="Quiz">Quiz</option>
+                    <option value="Exam">Exam</option>
+                    <option value="Project">Project</option>
+                    <option value="Practical">Practical</option>
+                    <option value="Assignment">Assignment</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="batchFilter" class="form-label">Batch</label>
+                <select id="batchFilter" class="form-select" onchange="filterAssessments()">
+                    <option value="">All Batches</option>
+                    <!-- Will be populated via AJAX -->
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="searchFilter" class="form-label">Search</label>
+                <input type="text" id="searchFilter" class="form-control" placeholder="Search by title..." oninput="filterAssessments()">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assessment Cards -->
+<div id="assessment-container">
+    <div class="row" id="assessment-list">
+        @foreach (var assessment in Model)
+        {
+            <div class="col-lg-6 col-xl-4 mb-4 assessment-card" 
+                 data-status="@assessment.Status" 
+                 data-type="@assessment.Type" 
+                 data-batch="@(assessment.BatchId?.ToString() ?? "")"
+                 data-title="@assessment.Title.ToLower()">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-white border-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="card-title mb-0">@assessment.Title</h6>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-action="Details" asp-route-id="@assessment.Id">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-action="Take" asp-route-id="@assessment.Id">
+                                        <i class="fas fa-play"></i> Take Assessment
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" onclick="changeStatus('@assessment.Id', 'Active')">
+                                        <i class="fas fa-play-circle text-success"></i> Activate
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="changeStatus('@assessment.Id', 'Archived')">
+                                        <i class="fas fa-archive text-warning"></i> Archive
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge bg-@(GetStatusColor(assessment.Status))">@assessment.Status</span>
+                            <span class="badge bg-secondary">@assessment.Type</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrEmpty(assessment.Description))
+                        {
+                            <p class="card-text text-muted small">@assessment.Description</p>
+                        }
+                        
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h6 class="text-primary mb-0">@assessment.DurationInMinutes</h6>
+                                    <small class="text-muted">Minutes</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h6 class="text-success mb-0">@assessment.MaxScore</h6>
+                                    <small class="text-muted">Max Score</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <h6 class="text-warning mb-0" id="submissions-@assessment.Id">-</h6>
+                                <small class="text-muted">Submissions</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-user"></i> @assessment.CreatedBy.Name
+                            </small>
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> @assessment.CreatedAt.ToString("MMM dd, yyyy")
+                            </small>
+                        </div>
+                        @if (assessment.StartDate.HasValue)
+                        {
+                            <div class="mt-2">
+                                <small class="text-info">
+                                    <i class="fas fa-clock"></i> 
+                                    Starts: @assessment.StartDate.Value.ToString("MMM dd, yyyy HH:mm")
+                                </small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Loading spinner -->
+<div id="loading" class="text-center" style="display: none;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2 text-muted">Loading assessments...</p>
+</div>
+
+<!-- Empty state -->
+<div id="empty-state" class="text-center py-5" style="display: none;">
+    <div class="text-muted">
+        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+        <h5>No assessments found</h5>
+        <p>Try adjusting your filters or create a new assessment.</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create Assessment
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            loadBatches();
+            loadSubmissionCounts();
+            
+            // Auto-refresh every 60 seconds
+            setInterval(function() {
+                loadSubmissionCounts();
+            }, 60000);
+        });
+
+        function loadBatches() {
+            $.ajax({
+                url: '/api/batches',
+                type: 'GET',
+                success: function(data) {
+                    var batchOptions = '<option value="">All Batches</option>';
+                    data.forEach(function(batch) {
+                        batchOptions += `<option value="${batch.id}">${batch.name}</option>`;
+                    });
+                    $('#batchFilter').html(batchOptions);
+                },
+                error: function() {
+                    console.error('Failed to load batches for filter');
+                }
+            });
+        }
+
+        function loadSubmissionCounts() {
+            $('.assessment-card').each(function() {
+                var assessmentId = $(this).find('[id^="submissions-"]').attr('id').replace('submissions-', '');
+                
+                $.ajax({
+                    url: `/api/assessments/${assessmentId}/results`,
+                    type: 'GET',
+                    success: function(data) {
+                        $(`#submissions-${assessmentId}`).text(data.length);
+                    },
+                    error: function() {
+                        $(`#submissions-${assessmentId}`).text('Error');
+                    }
+                });
+            });
+        }
+
+        function filterAssessments() {
+            var statusFilter = $('#statusFilter').val().toLowerCase();
+            var typeFilter = $('#typeFilter').val().toLowerCase();
+            var batchFilter = $('#batchFilter').val();
+            var searchFilter = $('#searchFilter').val().toLowerCase();
+
+            var visibleCount = 0;
+
+            $('.assessment-card').each(function() {
+                var card = $(this);
+                var status = card.data('status').toString().toLowerCase();
+                var type = card.data('type').toString().toLowerCase();
+                var batch = card.data('batch').toString();
+                var title = card.data('title').toString();
+
+                var show = true;
+
+                if (statusFilter && status !== statusFilter) show = false;
+                if (typeFilter && type !== typeFilter) show = false;
+                if (batchFilter && batch !== batchFilter) show = false;
+                if (searchFilter && !title.includes(searchFilter)) show = false;
+
+                if (show) {
+                    card.show();
+                    visibleCount++;
+                } else {
+                    card.hide();
+                }
+            });
+
+            if (visibleCount === 0) {
+                $('#empty-state').show();
+            } else {
+                $('#empty-state').hide();
+            }
+        }
+
+        function refreshAssessments() {
+            showLoading();
+            window.location.reload();
+        }
+
+        function changeStatus(assessmentId, newStatus) {
+            $.ajax({
+                url: '/Assessment/UpdateAssessmentStatus',
+                type: 'POST',
+                data: {
+                    id: assessmentId,
+                    status: newStatus,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showAlert('success', response.message);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        showAlert('error', response.message);
+                    }
+                },
+                error: function() {
+                    showAlert('error', 'Failed to update assessment status');
+                }
+            });
+        }
+    </script>
+}
+
+@functions {
+    string GetStatusColor(SkillGuide.Api.Models.AssessmentStatus status)
+    {
+        return status switch
+        {
+            SkillGuide.Api.Models.AssessmentStatus.Draft => "secondary",
+            SkillGuide.Api.Models.AssessmentStatus.Scheduled => "info",
+            SkillGuide.Api.Models.AssessmentStatus.Active => "success",
+            SkillGuide.Api.Models.AssessmentStatus.Completed => "primary",
+            SkillGuide.Api.Models.AssessmentStatus.Archived => "warning",
+            _ => "secondary"
+        };
+    }
+}
