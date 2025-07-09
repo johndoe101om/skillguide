@@ -1,0 +1,844 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-gray-800">
+                        <i class="fas fa-chart-line text-primary"></i> Analytics Dashboard
+                    </h1>
+                    <p class="text-muted">Real-time insights and performance analytics</p>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-secondary" onclick="refreshDashboard()">
+                        <i class="fas fa-sync-alt" id="refresh-icon"></i> Refresh
+                    </button>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-calendar"></i> <span id="current-period">Last 30 days</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="changePeriod('7days', 'Last 7 days')">Last 7 days</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="changePeriod('30days', 'Last 30 days')">Last 30 days</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="changePeriod('90days', 'Last 90 days')">Last 90 days</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="changePeriod('1year', 'Last year')">Last year</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Performance Indicators -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-users-count">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-success mr-2" id="users-trend">
+                            <i class="fas fa-arrow-up"></i> <span id="users-change">+12%</span>
+                        </span>
+                        <span class="text-muted">vs last period</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Batches</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="active-batches-count">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-success mr-2" id="batches-trend">
+                            <i class="fas fa-arrow-up"></i> <span id="batches-change">+2</span>
+                        </span>
+                        <span class="text-muted">new this month</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Completion Rate</div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="completion-rate">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-info" id="completion-progress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Average Score</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="average-score">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chart-bar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-success mr-2" id="score-trend">
+                            <i class="fas fa-arrow-up"></i> <span id="score-change">+3.1%</span>
+                        </span>
+                        <span class="text-muted">improvement</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row">
+        <!-- Performance Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Performance Overview</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow">
+                            <a class="dropdown-item" href="#" onclick="exportChart('performance')">Export Chart</a>
+                            <a class="dropdown-item" href="#" onclick="refreshChart('performance')">Refresh Data</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="performanceChart" height="320"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Batch Analytics -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Batch Analytics</h6>
+                    <button class="btn btn-sm btn-outline-primary" onclick="refreshBatchAnalytics()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="batch-analytics-container">
+                        <div class="text-center">
+                            <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                            <p class="text-muted mt-2">Loading batch analytics...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity and Quick Actions -->
+    <div class="row">
+        <!-- Recent Activity -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
+                    <a href="#" class="btn btn-sm btn-outline-primary" onclick="loadMoreActivities()">View All</a>
+                </div>
+                <div class="card-body">
+                    <div id="recent-activities">
+                        <div class="text-center">
+                            <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                            <p class="text-muted mt-2">Loading activities...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & System Status -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Quick Actions & System Status</h6>
+                </div>
+                <div class="card-body">
+                    <!-- Quick Actions -->
+                    <div class="mb-4">
+                        <h6 class="text-gray-900 mb-3">Quick Actions</h6>
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <button class="btn btn-outline-primary btn-sm w-100" onclick="createNewAssessment()">
+                                    <i class="fas fa-plus-circle"></i> New Assessment
+                                </button>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <button class="btn btn-outline-success btn-sm w-100" onclick="createNewBatch()">
+                                    <i class="fas fa-users"></i> New Batch
+                                </button>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <button class="btn btn-outline-info btn-sm w-100" onclick="viewReports()">
+                                    <i class="fas fa-chart-bar"></i> Reports
+                                </button>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <button class="btn btn-outline-warning btn-sm w-100" onclick="manageUsers()">
+                                    <i class="fas fa-user-cog"></i> Manage Users
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Status -->
+                    <div>
+                        <h6 class="text-gray-900 mb-3">System Status</h6>
+                        <div class="row text-center">
+                            <div class="col-3">
+                                <div class="mb-2">
+                                    <i class="fas fa-database fa-2x" id="db-status-icon"></i>
+                                    <div class="mt-1">
+                                        <small class="text-muted">Database</small>
+                                        <br>
+                                        <span class="badge" id="db-status">Checking...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mb-2">
+                                    <i class="fas fa-server fa-2x" id="api-status-icon"></i>
+                                    <div class="mt-1">
+                                        <small class="text-muted">API</small>
+                                        <br>
+                                        <span class="badge" id="api-status">Checking...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mb-2">
+                                    <i class="fas fa-cogs fa-2x" id="jobs-status-icon"></i>
+                                    <div class="mt-1">
+                                        <small class="text-muted">Jobs</small>
+                                        <br>
+                                        <span class="badge" id="jobs-status">Checking...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mb-2">
+                                    <i class="fas fa-envelope fa-2x" id="email-status-icon"></i>
+                                    <div class="mt-1">
+                                        <small class="text-muted">Email</small>
+                                        <br>
+                                        <span class="badge" id="email-status">Checking...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessments Overview Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Assessments</h6>
+                    <a asp-controller="Assessment" asp-action="Index" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="assessments-table" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Batch</th>
+                                    <th>Submissions</th>
+                                    <th>Avg Score</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assessments-body">
+                                <tr>
+                                    <td colspan="8" class="text-center">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading assessments...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let currentPeriod = '30days';
+        let performanceChart;
+
+        $(document).ready(function() {
+            initializeDashboard();
+            
+            // Auto-refresh every 60 seconds
+            setInterval(function() {
+                refreshDashboardData();
+            }, 60000);
+        });
+
+        function initializeDashboard() {
+            loadDashboardData();
+            checkSystemStatus();
+            loadRecentActivities();
+            loadRecentAssessments();
+            initializePerformanceChart();
+        }
+
+        function loadDashboardData() {
+            showLoading();
+            
+            $.ajax({
+                url: '/api/dashboard',
+                type: 'GET',
+                data: { period: currentPeriod },
+                success: function(data) {
+                    updateKPIs(data.overview);
+                    updateTrends(data.overview.trends);
+                    loadBatchAnalytics(data.batchAnalytics);
+                    hideLoading();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading dashboard data:', error);
+                    showAlert('error', 'Failed to load dashboard data');
+                    hideLoading();
+                }
+            });
+        }
+
+        function updateKPIs(overview) {
+            $('#total-users-count').text(overview.totalCandidates);
+            $('#active-batches-count').text(overview.activeBatches);
+            $('#completion-rate').text(overview.completionRate + '%');
+            $('#average-score').text(overview.averageScore + '%');
+            
+            // Update progress bar
+            $('#completion-progress').css('width', overview.completionRate + '%')
+                                   .attr('aria-valuenow', overview.completionRate);
+        }
+
+        function updateTrends(trends) {
+            updateTrendIndicator('users', trends.candidates);
+            updateTrendIndicator('batches', trends.batches);
+            updateTrendIndicator('score', trends.score);
+        }
+
+        function updateTrendIndicator(metric, trend) {
+            const element = $(`#${metric}-trend`);
+            const changeElement = $(`#${metric}-change`);
+            
+            if (trend.direction === 'up') {
+                element.removeClass('text-danger').addClass('text-success');
+                element.find('i').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+                changeElement.text(`+${trend.value}%`);
+            } else if (trend.direction === 'down') {
+                element.removeClass('text-success').addClass('text-danger');
+                element.find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+                changeElement.text(`-${trend.value}%`);
+            }
+        }
+
+        function loadBatchAnalytics(batchData) {
+            if (!batchData || batchData.length === 0) {
+                $('#batch-analytics-container').html('<p class="text-muted text-center">No batch data available</p>');
+                return;
+            }
+
+            let analyticsHtml = '';
+            batchData.slice(0, 5).forEach(function(batch) {
+                const trendColor = batch.trend === 'excellent' ? 'success' : 
+                                 batch.trend === 'good' ? 'info' : 'warning';
+                
+                analyticsHtml += `
+                    <div class="mb-3 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-0">${batch.name}</h6>
+                            <span class="badge bg-${trendColor}">${batch.trend}</span>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <small class="text-muted d-block">Candidates</small>
+                                <strong>${batch.candidates}</strong>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted d-block">Avg Score</small>
+                                <strong>${batch.avgScore}%</strong>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted d-block">Completion</small>
+                                <strong>${batch.completion}%</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            $('#batch-analytics-container').html(analyticsHtml);
+        }
+
+        function loadRecentActivities() {
+            $.ajax({
+                url: '/api/dashboard',
+                type: 'GET',
+                data: { userId: getCurrentUserId() },
+                success: function(data) {
+                    displayRecentActivities(data.recentActivities || []);
+                },
+                error: function() {
+                    $('#recent-activities').html('<p class="text-muted text-center">Unable to load activities</p>');
+                }
+            });
+        }
+
+        function displayRecentActivities(activities) {
+            if (!activities || activities.length === 0) {
+                $('#recent-activities').html('<p class="text-muted text-center">No recent activities</p>');
+                return;
+            }
+
+            let activitiesHtml = '';
+            activities.slice(0, 5).forEach(function(activity) {
+                const icon = getActivityIcon(activity.type);
+                const timeAgo = getTimeAgo(activity.createdAt);
+                
+                activitiesHtml += `
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-primary">
+                                <i class="${icon} text-white"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="small text-gray-500">${timeAgo}</div>
+                            <div class="font-weight-bold">${activity.title}</div>
+                            ${activity.description ? `<div class="text-gray-600 small">${activity.description}</div>` : ''}
+                        </div>
+                        ${activity.score ? `<span class="badge badge-success">${activity.score}%</span>` : ''}
+                    </div>
+                `;
+            });
+
+            $('#recent-activities').html(activitiesHtml);
+        }
+
+        function loadRecentAssessments() {
+            $.ajax({
+                url: '/api/assessments',
+                type: 'GET',
+                success: function(data) {
+                    displayRecentAssessments(data.slice(0, 10));
+                },
+                error: function() {
+                    $('#assessments-body').html('<tr><td colspan="8" class="text-center text-muted">Unable to load assessments</td></tr>');
+                }
+            });
+        }
+
+        function displayRecentAssessments(assessments) {
+            if (!assessments || assessments.length === 0) {
+                $('#assessments-body').html('<tr><td colspan="8" class="text-center text-muted">No assessments found</td></tr>');
+                return;
+            }
+
+            let tableHtml = '';
+            assessments.forEach(function(assessment) {
+                const statusBadge = getStatusBadge(assessment.status);
+                const createdDate = new Date(assessment.createdAt).toLocaleDateString();
+                
+                tableHtml += `
+                    <tr>
+                        <td><a href="/Assessment/Details/${assessment.id}">${assessment.title}</a></td>
+                        <td><span class="badge badge-secondary">${assessment.type}</span></td>
+                        <td>${statusBadge}</td>
+                        <td>${assessment.batchName || 'N/A'}</td>
+                        <td><span class="badge badge-info">${assessment.submissionCount}</span></td>
+                        <td>${assessment.averageScore.toFixed(1)}%</td>
+                        <td>${createdDate}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="/Assessment/Details/${assessment.id}" class="btn btn-outline-primary btn-sm" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button onclick="changeAssessmentStatus('${assessment.id}', 'Active')" class="btn btn-outline-success btn-sm" title="Activate">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#assessments-body').html(tableHtml);
+        }
+
+        function initializePerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            // Sample data - in production, this would come from an API
+            const chartData = {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Average Score',
+                    data: [78, 81, 85, 82, 87, 84],
+                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                    pointBorderColor: 'rgba(78, 115, 223, 1)',
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
+                    pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                    pointRadius: 3,
+                    pointBorderWidth: 2,
+                    tension: 0.3
+                }, {
+                    label: 'Completion Rate',
+                    data: [85, 88, 91, 87, 93, 89],
+                    backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                    borderColor: 'rgba(28, 200, 138, 1)',
+                    pointBackgroundColor: 'rgba(28, 200, 138, 1)',
+                    pointBorderColor: 'rgba(28, 200, 138, 1)',
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: 'rgba(28, 200, 138, 1)',
+                    pointHoverBorderColor: 'rgba(28, 200, 138, 1)',
+                    pointRadius: 3,
+                    pointBorderWidth: 2,
+                    tension: 0.3
+                }]
+            };
+
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 25,
+                            top: 25,
+                            bottom: 0
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                maxTicksLimit: 7
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                maxTicksLimit: 5,
+                                padding: 10,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: "rgb(234, 236, 244)",
+                                zeroLineColor: "rgb(234, 236, 244)",
+                                drawBorder: false,
+                                borderDash: [2],
+                                zeroLineBorderDash: [2]
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true
+                        },
+                        tooltip: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyColor: "#858796",
+                            titleMarginBottom: 10,
+                            titleColor: '#6e707e',
+                            titleFont: {
+                                size: 14
+                            },
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            displayColors: false,
+                            intersect: false,
+                            mode: 'index',
+                            caretPadding: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function checkSystemStatus() {
+            // Check API health
+            $.ajax({
+                url: '/health',
+                type: 'GET',
+                timeout: 5000,
+                success: function() {
+                    updateSystemStatus('api', 'healthy');
+                },
+                error: function() {
+                    updateSystemStatus('api', 'error');
+                }
+            });
+
+            // Check database connectivity (simulate)
+            setTimeout(() => updateSystemStatus('db', 'healthy'), 1000);
+            
+            // Check background jobs (simulate)
+            setTimeout(() => updateSystemStatus('jobs', 'healthy'), 1500);
+            
+            // Check email service (simulate)
+            setTimeout(() => updateSystemStatus('email', 'healthy'), 2000);
+        }
+
+        function updateSystemStatus(service, status) {
+            const iconElement = $(`#${service}-status-icon`);
+            const statusElement = $(`#${service}-status`);
+            
+            iconElement.removeClass('text-success text-danger text-warning');
+            statusElement.removeClass('bg-success bg-danger bg-warning');
+            
+            if (status === 'healthy') {
+                iconElement.addClass('text-success');
+                statusElement.addClass('bg-success').text('Healthy');
+            } else if (status === 'error') {
+                iconElement.addClass('text-danger');
+                statusElement.addClass('bg-danger').text('Error');
+            } else {
+                iconElement.addClass('text-warning');
+                statusElement.addClass('bg-warning').text('Warning');
+            }
+        }
+
+        // Action functions
+        function refreshDashboard() {
+            const icon = $('#refresh-icon');
+            icon.addClass('fa-spin');
+            
+            loadDashboardData();
+            loadRecentActivities();
+            loadRecentAssessments();
+            checkSystemStatus();
+            
+            setTimeout(() => icon.removeClass('fa-spin'), 2000);
+        }
+
+        function refreshDashboardData() {
+            loadDashboardData();
+        }
+
+        function changePeriod(period, displayText) {
+            currentPeriod = period;
+            $('#current-period').text(displayText);
+            loadDashboardData();
+        }
+
+        function refreshBatchAnalytics() {
+            loadDashboardData();
+        }
+
+        function refreshChart(chartType) {
+            if (chartType === 'performance' && performanceChart) {
+                // Reload chart data
+                initializePerformanceChart();
+            }
+        }
+
+        function exportChart(chartType) {
+            if (chartType === 'performance' && performanceChart) {
+                const url = performanceChart.toBase64Image();
+                const link = document.createElement('a');
+                link.download = 'performance-chart.png';
+                link.href = url;
+                link.click();
+            }
+        }
+
+        function createNewAssessment() {
+            window.location.href = '/Assessment/Create';
+        }
+
+        function createNewBatch() {
+            window.location.href = '/Batch/Create';
+        }
+
+        function viewReports() {
+            window.location.href = '/Reports';
+        }
+
+        function manageUsers() {
+            window.location.href = '/Users';
+        }
+
+        function loadMoreActivities() {
+            window.location.href = '/Activities';
+        }
+
+        function changeAssessmentStatus(assessmentId, status) {
+            $.ajax({
+                url: '/Assessment/UpdateAssessmentStatus',
+                type: 'POST',
+                data: {
+                    id: assessmentId,
+                    status: status,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showAlert('success', response.message);
+                        loadRecentAssessments();
+                    } else {
+                        showAlert('error', response.message);
+                    }
+                },
+                error: function() {
+                    showAlert('error', 'Failed to update assessment status');
+                }
+            });
+        }
+
+        // Helper functions
+        function getActivityIcon(type) {
+            const icons = {
+                'Assessment': 'fas fa-clipboard-check',
+                'Submission': 'fas fa-upload',
+                'Completion': 'fas fa-check-circle',
+                'Registration': 'fas fa-user-plus',
+                'Achievement': 'fas fa-trophy'
+            };
+            return icons[type] || 'fas fa-info-circle';
+        }
+
+        function getTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+            
+            if (diffInMinutes < 60) {
+                return diffInMinutes + ' minutes ago';
+            } else if (diffInMinutes < 1440) {
+                return Math.floor(diffInMinutes / 60) + ' hours ago';
+            } else {
+                return Math.floor(diffInMinutes / 1440) + ' days ago';
+            }
+        }
+
+        function getStatusBadge(status) {
+            const statusClasses = {
+                'Draft': 'badge-secondary',
+                'Scheduled': 'badge-info',
+                'Active': 'badge-success',
+                'Completed': 'badge-primary',
+                'Archived': 'badge-warning'
+            };
+            const className = statusClasses[status] || 'badge-secondary';
+            return `<span class="badge ${className}">${status}</span>`;
+        }
+
+        function getCurrentUserId() {
+            // In a real application, this would come from authentication
+            return '00000000-0000-0000-0000-000000000000';
+        }
+    </script>
+}
+
+<style>
+    .border-left-primary {
+        border-left: 0.25rem solid #4e73df !important;
+    }
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+    .icon-circle {
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .progress-sm {
+        height: 0.5rem;
+    }
+    .chart-area {
+        position: relative;
+        height: 320px;
+        width: 100%;
+    }
+</style>
